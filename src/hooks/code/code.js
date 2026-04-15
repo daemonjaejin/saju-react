@@ -1,0 +1,111 @@
+import { useState } from "react";
+import api from "@/api/axios";
+
+export const useCode = () => {
+  const [searchParams, setSearchParams] = useState({
+    groupCode: "",
+    groupName: "",
+    useYn: "",
+    page: 0,
+    size: 10,
+  });
+  const columns = [
+    {
+      title: "그룹코드",
+      dataIndex: "groupCode", // 데이터 키값
+      key: "groupCode",
+      width: 120,
+    },
+    {
+      title: "그룹명",
+      dataIndex: "groupCodeName",
+      key: "groupCodeName",
+    },
+    {
+      title: "공통코드",
+      dataIndex: "commonCode",
+      key: "commonCode",
+    },
+    {
+      title: "공통코드명",
+      dataIndex: "commonCodeName",
+      key: "commonCodeName",
+    },
+    {
+      title: "공통코드순번",
+      dataIndex: "commonCodeOrder",
+      key: "commonCodeOrder",
+    },
+    {
+      title: "사용유무",
+      dataIndex: "useYn",
+      key: "useYn",
+    },
+    {
+      title: "수정자",
+      dataIndex: "updateUserId",
+      key: "updateUserId",
+    },
+    {
+      title: "수정일",
+      dataIndex: "updateDate",
+      key: "updateDate",
+    },
+  ];
+
+  const [searchParam, setSearchParam] = useState({
+    groupCode: "",
+    groupCodeName: "",
+    useYn: "",
+    commonCode: "",
+    commonCodeName: "",
+  });
+
+  const handlerSearch = (params) => {
+    listData(params);
+  };
+
+  const [listResult, setListResult] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+
+  const listData = async (params) => {
+    try {
+      const response = await api.post("/code/list", params || {});
+      console.log("response: ", response);
+      setListResult(response?.data?.content || []);
+      setTotalCount(response?.data?.totalCount || 0);
+      setSearchParams((prev) => ({
+        ...prev,
+        page: response?.data?.page || 0,
+        size: response?.data?.size || 10,
+      }));
+    } catch (error) {
+      console.log("error: ", error);
+    } finally {
+      console.log("finally");
+    }
+  };
+  const handleInitSearch = () => {
+    listData();
+  };
+  const handleTableChange = (pagination) => {
+    const newPage = pagination.current;
+    setSearchParam((prev) => ({
+      ...prev,
+      page: newPage,
+      size: pagination.pageSize,
+    }));
+    listData({ ...searchParam, page: newPage, size: pagination.pageSize });
+  };
+  return {
+    listData,
+    listResult,
+    handlerSearch,
+    handleInitSearch,
+    columns,
+    handleTableChange,
+    searchParams,
+    setSearchParams,
+    totalCount,
+  };
+};
