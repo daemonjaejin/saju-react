@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import SearchForm from "@/components/code/SearchForm";
+import ModalForm from "@/components/code/ModalForm";
+import SliderForm from "@/components/code/SliderForm";
 import { useCode } from "@/hooks/code/code";
 import { Table } from "antd";
 
@@ -14,6 +16,14 @@ const Code = () => {
     searchParams,
     setSearchParams,
     totalCount,
+    updateCodeData,
+    setUpdateCodeData,
+    isUpdate,
+    setIsUpdate,
+    updateData,
+    isInsert,
+    setIsInsert,
+    insertData,
   } = useCode();
 
   useEffect(() => {
@@ -40,6 +50,7 @@ const Code = () => {
         handleInitSearch={handleInitSearch}
         setSearchParams={setSearchParams}
         searchParams={searchParams}
+        setIsInsert={setIsInsert}
       />
       <Table
         columns={columns}
@@ -49,7 +60,8 @@ const Code = () => {
         loading={false}
         onRow={(record) => ({
           onClick: () => {
-            console.log("record: ", record);
+            setUpdateCodeData(record);
+            setIsUpdate(true);
           },
         })}
         pagination={{
@@ -60,6 +72,30 @@ const Code = () => {
         }}
         onChange={handleTableChange}
       />
+      {isUpdate && (
+        <ModalForm
+          isVisible={isUpdate}
+          onClose={() => {
+            setIsUpdate(false);
+          }}
+          onSave={(param) => {
+            console.log("param: ", param);
+            // updateData(param);
+          }}
+          initialData={updateCodeData}
+        />
+      )}
+      {isInsert && (
+        <SliderForm
+          isVisible={isInsert}
+          onClose={() => {
+            setIsInsert(false);
+          }}
+          onInsert={(param) => {
+            insertData(param);
+          }}
+        />
+      )}
     </div>
   );
 };

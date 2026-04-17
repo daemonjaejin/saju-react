@@ -1,6 +1,6 @@
 import api from "@/api/axios";
 
-export const useCodeSearch = ({ setSearchParams }) => {
+export const searchForm = ({ setSearchParams }) => {
   const handlerChange = (nameOrEvent, value) => {
     if (nameOrEvent.target) {
       const { name, value: val } = nameOrEvent.target;

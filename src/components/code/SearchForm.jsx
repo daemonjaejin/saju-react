@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useCodeSearch } from "@/hooks/code/codeSearch";
+import { searchForm } from "@/hooks/code/searchForm";
 import { Select, Input } from "antd";
 import PropTypes from "prop-types";
 
@@ -8,8 +8,9 @@ const SearchFormCode = ({
   searchParams,
   handlerSearch,
   handleInitSearch,
+  setIsInsert,
 }) => {
-  const { handlerChange, fetchData } = useCodeSearch({ setSearchParams });
+  const { handlerChange, fetchData } = searchForm({ setSearchParams });
   const [groupOptions, setGroupOptions] = useState([
     { value: "", label: "선택하세요", name: "" },
   ]);
@@ -72,6 +73,14 @@ const SearchFormCode = ({
         />
       </div>
       <button
+        className="btn-red"
+        onClick={() => {
+          setIsInsert(true);
+        }}
+      >
+        등록
+      </button>
+      <button
         className="btn-blue"
         onClick={() => {
           handlerSearch(searchParams);
@@ -104,4 +113,5 @@ SearchFormCode.propTypes = {
   searchParams: PropTypes.object.isRequired,
   handlerSearch: PropTypes.func.isRequired,
   handleInitSearch: PropTypes.func.isRequired,
+  setIsInsert: PropTypes.bool.isRequired,
 };

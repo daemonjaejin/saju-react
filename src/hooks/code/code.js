@@ -9,6 +9,9 @@ export const useCode = () => {
     page: 0,
     size: 10,
   });
+  const [updateCodeData, setUpdateCodeData] = useState({});
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [isInsert, setIsInsert] = useState(false);
   const columns = [
     {
       title: "그룹코드",
@@ -71,7 +74,6 @@ export const useCode = () => {
   const listData = async (params) => {
     try {
       const response = await api.post("/code/list", params || {});
-      console.log("response: ", response);
       setListResult(response?.data?.content || []);
       setTotalCount(response?.data?.totalCount || 0);
       setSearchParams((prev) => ({
@@ -79,6 +81,32 @@ export const useCode = () => {
         page: response?.data?.page || 0,
         size: response?.data?.size || 10,
       }));
+    } catch (error) {
+      console.log("error: ", error);
+    } finally {
+      console.log("finally");
+    }
+  };
+  const updateData = async (params) => {
+    try {
+      const response = await api.put("/code/update", params || {});
+      if (response?.status === 200 && response?.data === 1) {
+        setIsUpdate(false);
+        listData();
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    } finally {
+      console.log("finally");
+    }
+  };
+  const insertData = async (params) => {
+    try {
+      const response = await api.post("/code/insert", params || {});
+      if (response?.status === 200 && response?.data === 1) {
+        setIsInsert(false);
+        listData();
+      }
     } catch (error) {
       console.log("error: ", error);
     } finally {
@@ -107,5 +135,13 @@ export const useCode = () => {
     searchParams,
     setSearchParams,
     totalCount,
+    updateCodeData,
+    setUpdateCodeData,
+    isUpdate,
+    setIsUpdate,
+    updateData,
+    isInsert,
+    setIsInsert,
+    insertData,
   };
 };

@@ -136,3 +136,24 @@ button {
 .btn-gray:hover {
   background-color: #a6a9ad;
 }
+
+/* Drawer 내부의 버튼 레이아웃 커스텀 (필요 시) */
+.ant-drawer-header-title {
+  font-weight: bold;
+}
+
+.ant-drawer-body {
+  padding: 24px !important;
+}
+
+/* 폼 아이템 간격 조정 */
+.ant-form-item-label > label {
+  font-weight: 600 !important;
+  color: #34495e !important;
+}
+
+/* Ant Design의 파란색을 프로젝트의 btn-blue와 맞추고 싶을 때 */
+.ant-btn-primary {
+  box-shadow: none;
+  border-radius: 4px;
+}
