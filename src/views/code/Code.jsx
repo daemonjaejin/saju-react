@@ -79,8 +79,8 @@ const Code = () => {
             setIsUpdate(false);
           }}
           onSave={(param) => {
-            console.log("param: ", param);
-            // updateData(param);
+            param.useYn = param.useYn === "사용" ? 1 : 0;
+            updateData(param);
           }}
           initialData={updateCodeData}
         />
@@ -92,6 +92,7 @@ const Code = () => {
             setIsInsert(false);
           }}
           onInsert={(param) => {
+            console.log("param: ", param);
             insertData(param);
           }}
         />

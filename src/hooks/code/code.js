@@ -102,7 +102,7 @@ export const useCode = () => {
   };
   const insertData = async (params) => {
     try {
-      const response = await api.post("/code/insert", params || {});
+      const response = await api.put("/code/insert", params || {});
       if (response?.status === 200 && response?.data === 1) {
         setIsInsert(false);
         listData();

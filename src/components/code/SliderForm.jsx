@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Drawer, Form, Input, Button, Select, Radio, Space } from "antd";
+import {
+  Drawer,
+  Form,
+  Input,
+  Button,
+  Select,
+  Radio,
+  Space,
+  InputNumber,
+} from "antd";
 import PropTypes from "prop-types";
 import { sliderForm } from "@/hooks/code/sliderForm";
 
-const SliderForm = ({ isVisible, onClose, onSave, initialData }) => {
+const SliderForm = ({ isVisible, onClose, onInsert }) => {
   const [form] = Form.useForm();
   const fetchData = sliderForm();
   const [groupOptions, setGroupOptions] = useState([
@@ -23,7 +32,6 @@ const SliderForm = ({ isVisible, onClose, onSave, initialData }) => {
         const formattedOptions = rawData.map((item) => ({
           value: item.groupCode,
           label: item.groupCodeName,
-          name: item.groupCodeName,
         }));
         setGroupOptions(formattedOptions);
       } catch (error) {
@@ -58,12 +66,15 @@ const SliderForm = ({ isVisible, onClose, onSave, initialData }) => {
       <Form
         form={form}
         layout="vertical"
-        onFinish={onSave}
-        initialValues={initialData || { useYn: "사용", commonCodeOrder: 0 }}
+        onFinish={onInsert}
+        onFinishFailed={(errorInfo) => {
+          console.log("errorInfo: ", errorInfo);
+        }}
+        initialValues={{ useYn: "1", commonCodeOrder: 1 }}
       >
         <Form.Item
           label="그룹코드"
-          name="groupCodeName"
+          name="groupCode"
           rules={[{ required: true, message: "그룹코드를 선택해주세요" }]}
         >
           <Select
@@ -103,18 +114,29 @@ const SliderForm = ({ isVisible, onClose, onSave, initialData }) => {
           name="commonCodeOrder"
           rules={[
             {
-              pattern: /^\d+$/,
-              message: "0 이상의 정수만 입력 가능합니다.",
+              validator: (_, value) => {
+                if (!value || Number(value) > 0) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error("1 이상의 정수만 입력 가능합니다."),
+                );
+              },
             },
           ]}
         >
-          <Input type="number" min={0} placeholder="0" />
+          <InputNumber
+            min={1}
+            keyboard={true}
+            style={{ width: "100%" }}
+            placeholder="1"
+          />
         </Form.Item>
 
         <Form.Item label="사용여부" name="useYn">
           <Radio.Group>
-            <Radio value="사용">사용</Radio>
-            <Radio value="미사용">미사용</Radio>
+            <Radio value="1">사용</Radio>
+            <Radio value="0">미사용</Radio>
           </Radio.Group>
         </Form.Item>
       </Form>
@@ -125,8 +147,7 @@ const SliderForm = ({ isVisible, onClose, onSave, initialData }) => {
 SliderForm.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-  initialData: PropTypes.object,
+  onInsert: PropTypes.func.isRequired,
 };
 
 export default SliderForm;
