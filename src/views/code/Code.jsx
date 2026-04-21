@@ -52,6 +52,16 @@ const Code = () => {
         searchParams={searchParams}
         setIsInsert={setIsInsert}
       />
+      {/* 총 개수 표시 영역 */}
+      <div className="table-header">
+        <div className="total-info">
+          전체{" "}
+          <span className="count">{totalCount?.toLocaleString() || 0}</span>건
+        </div>
+        {/* 나중에 우측에 버튼이나 다른 요소(예: 엑셀 다운로드)를 
+            추가하고 싶으면 여기에 작성하면 자동으로 우측 정렬됩니다. 
+        */}
+      </div>
       <Table
         columns={columns}
         dataSource={listResult}

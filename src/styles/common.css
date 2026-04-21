@@ -157,3 +157,56 @@ button {
   box-shadow: none;
   border-radius: 4px;
 }
+
+/* --- 필터 칩 (CheckableTag) 커스텀 스타일 --- */
+.filter-chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* 기본 상태 */
+.ant-tag-checkable {
+  padding: 4px 16px !important;
+  font-size: 14px !important;
+  border-radius: 20px !important;
+  border: 1px solid #d9d9d9 !important;
+  background-color: transparent !important;
+  color: rgba(0, 0, 0, 0.88) !important;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+/* 선택(활성화) 상태 */
+.ant-tag-checkable-checked {
+  background-color: #e6f4ff !important;
+  border-color: transparent !important; /* 선택 시 테두리 제거 */
+  color: #1677ff !important;
+}
+
+/* 호버 시 효과 (선택되지 않았을 때만) */
+.ant-tag-checkable:not(.ant-tag-checkable-checked):hover {
+  border-color: #409eff !important;
+  color: #409eff !important;
+}
+
+/* --- 테이블 상단 정보 영역 (Total Count 등) --- */
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  margin-top: 24px;
+}
+
+.table-header .total-info {
+  font-size: 14px;
+  font-weight: 700;
+  color: #34495e; /* 기존 label 색상과 통일 */
+}
+
+.table-header .total-info .count {
+  color: #409eff; /* 프로젝트 메인 블루(#409eff)로 통일 */
+  margin: 0 2px;
+}

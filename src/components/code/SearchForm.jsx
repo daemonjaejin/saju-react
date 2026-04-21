@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import { searchForm } from "@/hooks/code/searchForm";
-import { Select, Input } from "antd";
+import { Select, Input, Tag, Flex } from "antd";
 import PropTypes from "prop-types";
 
 const SearchFormCode = ({
@@ -19,6 +19,31 @@ const SearchFormCode = ({
     { value: 1, label: "사용" },
     { value: 0, label: "미사용" },
   ]);
+  const { CheckableTag } = Tag;
+  const [tagsData, setTagsData] = useState([]);
+
+  const [selectedTags, setSelectedTags] = useState(["전체"]);
+
+  const handleChange = (tag, checked) => {
+    let nextTags;
+    if (tag === "전체") {
+      nextTags = checked ? [["전체"]] : [];
+    }else{
+      const baseTags = checked ?
+      [...selectedTags, tag] : // 선택 시 추가
+      selectedTags.filter((t) => t !== tag); // 해제 시 제거
+      
+      nextTags = baseTags.filter((t) => t !== "전체");
+    }
+
+    setSelectedTags(nextTags);
+
+    setSearchParams((prev) => ({
+      ...prev,
+      groupCodeNameList: nextTags,
+    }));
+
+  };
   useEffect(() => {
     const getGroupList = async () => {
       try {
@@ -29,6 +54,12 @@ const SearchFormCode = ({
           label: item.groupCodeName,
           name: item.groupCodeName,
         }));
+        // 2. 칩/태그용 데이터 추출 (groupCodeName만 모으기)
+        const newTags = ["전체", ...rawData.map((item) => item.groupCodeName)];
+
+        // 3. 상태 업데이트 (이 시점에 화면이 다시 그려짐)
+        setTagsData(newTags);
+
         setGroupOptions([
           { value: "", label: "선택하세요" },
           ...formattedOptions,
@@ -72,6 +103,19 @@ const SearchFormCode = ({
           options={options}
         />
       </div>
+      {/* 칩/태그 필터 영역 */}
+      <Flex gap="small" wrap>
+        <label htmlFor="groupCodeNameList">그룹코드 필터</label>
+        {tagsData.map((tag) => (
+          <CheckableTag
+            key={tag}
+            checked={selectedTags.includes(tag)}
+            onChange={(checked) => handleChange(tag, checked)}
+          >
+            {tag}
+          </CheckableTag>
+        ))}
+      </Flex>
       <button
         className="btn-red"
         onClick={() => {
@@ -83,6 +127,7 @@ const SearchFormCode = ({
       <button
         className="btn-blue"
         onClick={() => {
+          // console.log("searchParams: ", searchParams);
           handlerSearch(searchParams);
         }}
       >
@@ -97,7 +142,9 @@ const SearchFormCode = ({
             useYn: "",
             page: 0,
             size: 10,
+            groupCodeNameList: [],
           });
+          setSelectedTags(["전체"]);
           handleInitSearch();
         }}
       >

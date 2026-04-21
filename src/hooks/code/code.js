@@ -8,6 +8,7 @@ export const useCode = () => {
     useYn: "",
     page: 0,
     size: 10,
+    groupCodeNameList: [],
   });
   const [updateCodeData, setUpdateCodeData] = useState({});
   const [isUpdate, setIsUpdate] = useState(false);
