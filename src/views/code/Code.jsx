@@ -27,6 +27,7 @@ const Code = () => {
     selectedTags,
     setSelectedTags,
     commonCodeNameHandler,
+    dateSearchHandler,
   } = useCode();
 
   useEffect(() => {
@@ -57,6 +58,7 @@ const Code = () => {
         selectedTags={selectedTags}
         setSelectedTags={setSelectedTags}
         commonCodeNameHandler={commonCodeNameHandler}
+        dateSearchHandler={dateSearchHandler}
       />
       {/* 총 개수 표시 영역 */}
       <div className="table-header">

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { searchForm } from "@/hooks/code/searchForm";
-import { Select, Input, Tag, Flex } from "antd";
+import { Select, Input, Tag, Flex, DatePicker } from "antd";
 import PropTypes from "prop-types";
 
 const SearchFormCode = ({
@@ -12,7 +12,9 @@ const SearchFormCode = ({
   selectedTags,
   setSelectedTags,
   commonCodeNameHandler,
+  dateSearchHandler,
 }) => {
+  const { RangePicker } = DatePicker;
   const { handlerChange, fetchData } = searchForm({ setSearchParams });
   const [groupOptions, setGroupOptions] = useState([
     { value: "", label: "선택하세요", name: "" },
@@ -132,6 +134,18 @@ const SearchFormCode = ({
           value={searchParams.commonCodeNameList}
         />
       </div>
+      <div className="input-group">
+        <label htmlFor="dateSearch">기간 조회</label>
+        <RangePicker
+          style={{
+            flex: 1, // CSS 대신 인라인으로 줄 경우
+            minWidth: "250px", // 최소 너비 보장
+          }}
+          placeholder={["시작일", "종료일"]}
+          onChange={dateSearchHandler}
+          value={searchParams.dateRange}
+        />
+      </div>
       <button
         className="btn-red"
         onClick={() => {
@@ -151,16 +165,6 @@ const SearchFormCode = ({
       <button
         className="btn-gray"
         onClick={() => {
-          setSearchParams({
-            groupCode: "",
-            groupName: "",
-            useYn: "",
-            page: 0,
-            size: 10,
-            groupCodeNameList: [],
-            commonCodeNameList: [],
-          });
-          setSelectedTags(["전체"]);
           handleInitSearch();
         }}
       >
@@ -180,6 +184,5 @@ SearchFormCode.propTypes = {
   selectedTags: PropTypes.array.isRequired,
   setSelectedTags: PropTypes.array.isRequired,
   commonCodeNameHandler: PropTypes.func.isRequired,
-  commonCodeName: PropTypes.array.isRequired,
-  setCommonCodeName: PropTypes.array.isRequired,
+  dateSearchHandler: PropTypes.func.isRequired,
 };

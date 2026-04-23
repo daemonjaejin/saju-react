@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "@/api/axios";
+import { message, Modal } from "antd";
 
 export const useCode = () => {
   const [searchParams, setSearchParams] = useState({
@@ -10,6 +11,7 @@ export const useCode = () => {
     size: 10,
     groupCodeNameList: [],
     commonCodeNameList: [],
+    dateRange: [],
   });
   const [updateCodeData, setUpdateCodeData] = useState({});
   const [isUpdate, setIsUpdate] = useState(false);
@@ -19,6 +21,12 @@ export const useCode = () => {
     setSearchParams((prev) => ({
       ...prev,
       commonCodeNameList: value,
+    }));
+  };
+  const dateSearchHandler = (value) => {
+    setSearchParams((prev) => ({
+      ...prev,
+      dateRange: value,
     }));
   };
   const columns = [
@@ -108,24 +116,54 @@ export const useCode = () => {
           size: 10,
           groupCodeNameList: [],
           commonCodeNameList: [],
+          dateRange: [],
         });
         setSelectedTags(["전체"]);
         setIsUpdate(false);
         listData();
       }
     } catch (error) {
-      console.log("error: ", error);
+      message.error("오류가 발생했습니다.", error);
     } finally {
       console.log("finally");
     }
   };
   const updateData = async (params) => {
-    insertUpdate(params, "/code/update");
+    Modal.confirm({
+      title: "수정",
+      content: "수정하시겠습니까?",
+      okText: "수정",
+      cancelText: "취소",
+      onOk: async () => {
+        insertUpdate(params, "/code/update");
+        message.success("수정되었습니다.");
+      },
+    });
   };
   const insertData = async (params) => {
-    insertUpdate(params, "/code/insert");
+    Modal.confirm({
+      title: "저장",
+      content: "저장하시겠습니까?",
+      okText: "저장",
+      cancelText: "취소",
+      onOk: async () => {
+        insertUpdate(params, "/code/insert");
+        message.success("저장되었습니다.");
+      },
+    });
   };
   const handleInitSearch = () => {
+    setSearchParams({
+      groupCode: "",
+      groupName: "",
+      useYn: "",
+      page: 0,
+      size: 10,
+      groupCodeNameList: [],
+      commonCodeNameList: [],
+      dateRange: [],
+    });
+    setSelectedTags(["전체"]);
     listData();
   };
   const handleTableChange = (pagination) => {
@@ -158,5 +196,6 @@ export const useCode = () => {
     selectedTags,
     setSelectedTags,
     commonCodeNameHandler,
+    dateSearchHandler,
   };
 };
