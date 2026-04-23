@@ -30,7 +30,7 @@ const SearchFormCode = ({
   const handleChange = (tag, checked) => {
     let nextTags;
     if (tag === "전체") {
-      nextTags = checked ? [["전체"]] : [];
+      nextTags = checked ? ["전체"] : [];
     } else {
       const baseTags = checked
         ? [...selectedTags, tag] // 선택 시 추가

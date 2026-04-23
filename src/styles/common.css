@@ -222,3 +222,74 @@ button {
   border-radius: 4px !important;
   min-height: 35px; /* 일반 input 높이와 비슷하게 맞춤 */
 }
+
+/* --- 메뉴 관리 페이지 (Tree Table & Detail Card) 커스텀 --- */
+
+/* 1. 테이블 행 클릭 스타일 */
+.ant-table-tbody > tr.ant-table-row {
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ant-table-tbody > tr.ant-table-row:hover > td {
+  background-color: #f0f7ff !important; /* 마우스 호버 시 연한 파란색 */
+}
+
+/* 2. 카드 스타일 고도화 */
+.ant-card {
+  border-radius: 8px;
+  border: 1px solid #e0e4e8;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.ant-card-head {
+  background-color: #fafafa;
+  border-bottom: 1px solid #e0e4e8;
+  min-height: 45px;
+}
+
+.ant-card-head-title {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: #2c3e50;
+}
+
+/* 3. 우측 상세 폼(Detail Form) 레이아웃 */
+.menu-detail-form .form-item {
+  margin-bottom: 18px;
+}
+
+.menu-detail-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+/* 4. 비활성화된 인풋 스타일 (부모 메뉴 ID 등) */
+.ant-input-disabled {
+  background-color: #f9fafb !important;
+  color: #9ca3af !important;
+  cursor: not-allowed;
+}
+
+/* 5. 트리 테이블 내부의 '+ 하위' 버튼 등 링크 버튼 스타일 */
+.ant-btn-link {
+  font-weight: 600;
+  padding: 0 4px;
+}
+
+/* 6. Empty(목록에서 메뉴를 선택해주세요) 중앙 정렬 */
+.ant-empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #9ca3af;
+}
+
+/* 7. 상세 정보 카드 상단의 삭제/취소 버튼 영역 간격 */
+.ant-card-extra .ant-space {
+  gap: 8px !important;
+}

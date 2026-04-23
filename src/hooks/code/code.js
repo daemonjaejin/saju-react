@@ -29,49 +29,6 @@ export const useCode = () => {
       dateRange: value,
     }));
   };
-  const columns = [
-    {
-      title: "그룹코드",
-      dataIndex: "groupCode", // 데이터 키값
-      key: "groupCode",
-      width: 120,
-    },
-    {
-      title: "그룹명",
-      dataIndex: "groupCodeName",
-      key: "groupCodeName",
-    },
-    {
-      title: "공통코드",
-      dataIndex: "commonCode",
-      key: "commonCode",
-    },
-    {
-      title: "공통코드명",
-      dataIndex: "commonCodeName",
-      key: "commonCodeName",
-    },
-    {
-      title: "공통코드순번",
-      dataIndex: "commonCodeOrder",
-      key: "commonCodeOrder",
-    },
-    {
-      title: "사용유무",
-      dataIndex: "useYn",
-      key: "useYn",
-    },
-    {
-      title: "수정자",
-      dataIndex: "updateUserId",
-      key: "updateUserId",
-    },
-    {
-      title: "수정일",
-      dataIndex: "updateDate",
-      key: "updateDate",
-    },
-  ];
 
   const [searchParam, setSearchParam] = useState({
     groupCode: "",
@@ -104,7 +61,7 @@ export const useCode = () => {
       console.log("finally");
     }
   };
-  const insertUpdate = async (params, url) => {
+  const insertUpdate = async (params, url, msg) => {
     try {
       const response = await api.put(url, params || {});
       if (response?.status === 200 && response?.data === 1) {
@@ -121,11 +78,10 @@ export const useCode = () => {
         setSelectedTags(["전체"]);
         setIsUpdate(false);
         listData();
+        message.success(msg + "되었습니다.");
       }
     } catch (error) {
       message.error("오류가 발생했습니다.", error);
-    } finally {
-      console.log("finally");
     }
   };
   const updateData = async (params) => {
@@ -135,8 +91,7 @@ export const useCode = () => {
       okText: "수정",
       cancelText: "취소",
       onOk: async () => {
-        insertUpdate(params, "/code/update");
-        message.success("수정되었습니다.");
+        await insertUpdate(params, "/code/update", "수정");
       },
     });
   };
@@ -147,8 +102,7 @@ export const useCode = () => {
       okText: "저장",
       cancelText: "취소",
       onOk: async () => {
-        insertUpdate(params, "/code/insert");
-        message.success("저장되었습니다.");
+        await insertUpdate(params, "/code/insert", "저장");
       },
     });
   };
@@ -167,20 +121,20 @@ export const useCode = () => {
     listData();
   };
   const handleTableChange = (pagination) => {
-    const newPage = pagination.current;
-    setSearchParam((prev) => ({
-      ...prev,
-      page: newPage,
+    const newParam = {
+      ...searchParam,
+      page: pagination.current,
       size: pagination.pageSize,
-    }));
-    listData({ ...searchParam, page: newPage, size: pagination.pageSize });
+    };
+
+    setSearchParam(newParam);
+    listData(newParam);
   };
   return {
     listData,
     listResult,
     handlerSearch,
     handleInitSearch,
-    columns,
     handleTableChange,
     searchParams,
     setSearchParams,

@@ -1,4 +1,5 @@
 import api from "@/api/axios";
+import { message } from "antd";
 
 export const searchForm = ({ setSearchParams }) => {
   const handlerChange = (nameOrEvent, value) => {
@@ -14,10 +15,8 @@ export const searchForm = ({ setSearchParams }) => {
       const response = await api.post(url, params || {});
       return response;
     } catch (error) {
-      console.log("error: ", error);
+      message.error("오류가 발생했습니다.", error);
       return error;
-    } finally {
-      console.log("finally");
     }
   };
   return {

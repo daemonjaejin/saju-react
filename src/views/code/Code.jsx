@@ -11,7 +11,6 @@ const Code = () => {
     listResult,
     handlerSearch,
     handleInitSearch,
-    columns,
     handleTableChange,
     searchParams,
     setSearchParams,
@@ -34,18 +33,57 @@ const Code = () => {
     listData();
   }, []);
 
-  columns.map((col) => {
-    if (col.key === "useYn") {
-      col.render = (val) => {
-        return (
-          <span style={{ color: val === 1 ? "blue" : "red" }}>
-            {val === 1 ? "사용" : "미사용"}
-          </span>
-        );
-      };
-    }
-    return col;
-  });
+  const columns = [
+      {
+        title: "그룹코드",
+        dataIndex: "groupCode", // 데이터 키값
+        key: "groupCode",
+        width: 120,
+      },
+      {
+        title: "그룹명",
+        dataIndex: "groupCodeName",
+        key: "groupCodeName",
+      },
+      {
+        title: "공통코드",
+        dataIndex: "commonCode",
+        key: "commonCode",
+      },
+      {
+        title: "공통코드명",
+        dataIndex: "commonCodeName",
+        key: "commonCodeName",
+      },
+      {
+        title: "공통코드순번",
+        dataIndex: "commonCodeOrder",
+        key: "commonCodeOrder",
+      },
+      {
+        title: "사용유무",
+        dataIndex: "useYn",
+        key: "useYn",
+        render: (val) => {
+          return (
+            <span style={{ color: val === 1 ? "blue" : "red" }}>
+              {val === 1 ? "사용" : "미사용"}
+            </span>
+          );
+        },
+      },
+      {
+        title: "수정자",
+        dataIndex: "updateUserId",
+        key: "updateUserId",
+      },
+      {
+        title: "수정일",
+        dataIndex: "updateDate",
+        key: "updateDate",
+      },
+    ];
+
   return (
     <div>
       <h1>Code</h1>
