@@ -9,10 +9,18 @@ export const useCode = () => {
     page: 0,
     size: 10,
     groupCodeNameList: [],
+    commonCodeNameList: [],
   });
   const [updateCodeData, setUpdateCodeData] = useState({});
   const [isUpdate, setIsUpdate] = useState(false);
   const [isInsert, setIsInsert] = useState(false);
+  const [selectedTags, setSelectedTags] = useState(["전체"]);
+  const commonCodeNameHandler = (value) => {
+    setSearchParams((prev) => ({
+      ...prev,
+      commonCodeNameList: value,
+    }));
+  };
   const columns = [
     {
       title: "그룹코드",
@@ -88,10 +96,20 @@ export const useCode = () => {
       console.log("finally");
     }
   };
-  const updateData = async (params) => {
+  const insertUpdate = async (params, url) => {
     try {
-      const response = await api.put("/code/update", params || {});
+      const response = await api.put(url, params || {});
       if (response?.status === 200 && response?.data === 1) {
+        setSearchParams({
+          groupCode: "",
+          groupName: "",
+          useYn: "",
+          page: 0,
+          size: 10,
+          groupCodeNameList: [],
+          commonCodeNameList: [],
+        });
+        setSelectedTags(["전체"]);
         setIsUpdate(false);
         listData();
       }
@@ -101,18 +119,11 @@ export const useCode = () => {
       console.log("finally");
     }
   };
+  const updateData = async (params) => {
+    insertUpdate(params, "/code/update");
+  };
   const insertData = async (params) => {
-    try {
-      const response = await api.put("/code/insert", params || {});
-      if (response?.status === 200 && response?.data === 1) {
-        setIsInsert(false);
-        listData();
-      }
-    } catch (error) {
-      console.log("error: ", error);
-    } finally {
-      console.log("finally");
-    }
+    insertUpdate(params, "/code/insert");
   };
   const handleInitSearch = () => {
     listData();
@@ -144,5 +155,8 @@ export const useCode = () => {
     isInsert,
     setIsInsert,
     insertData,
+    selectedTags,
+    setSelectedTags,
+    commonCodeNameHandler,
   };
 };

@@ -24,6 +24,9 @@ const Code = () => {
     isInsert,
     setIsInsert,
     insertData,
+    selectedTags,
+    setSelectedTags,
+    commonCodeNameHandler,
   } = useCode();
 
   useEffect(() => {
@@ -51,6 +54,9 @@ const Code = () => {
         setSearchParams={setSearchParams}
         searchParams={searchParams}
         setIsInsert={setIsInsert}
+        selectedTags={selectedTags}
+        setSelectedTags={setSelectedTags}
+        commonCodeNameHandler={commonCodeNameHandler}
       />
       {/* 총 개수 표시 영역 */}
       <div className="table-header">

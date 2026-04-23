@@ -1,4 +1,4 @@
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect } from "react";
 import { searchForm } from "@/hooks/code/searchForm";
 import { Select, Input, Tag, Flex } from "antd";
 import PropTypes from "prop-types";
@@ -9,6 +9,9 @@ const SearchFormCode = ({
   handlerSearch,
   handleInitSearch,
   setIsInsert,
+  selectedTags,
+  setSelectedTags,
+  commonCodeNameHandler,
 }) => {
   const { handlerChange, fetchData } = searchForm({ setSearchParams });
   const [groupOptions, setGroupOptions] = useState([
@@ -22,17 +25,15 @@ const SearchFormCode = ({
   const { CheckableTag } = Tag;
   const [tagsData, setTagsData] = useState([]);
 
-  const [selectedTags, setSelectedTags] = useState(["전체"]);
-
   const handleChange = (tag, checked) => {
     let nextTags;
     if (tag === "전체") {
       nextTags = checked ? [["전체"]] : [];
-    }else{
-      const baseTags = checked ?
-      [...selectedTags, tag] : // 선택 시 추가
-      selectedTags.filter((t) => t !== tag); // 해제 시 제거
-      
+    } else {
+      const baseTags = checked
+        ? [...selectedTags, tag] // 선택 시 추가
+        : selectedTags.filter((t) => t !== tag); // 해제 시 제거
+
       nextTags = baseTags.filter((t) => t !== "전체");
     }
 
@@ -42,7 +43,6 @@ const SearchFormCode = ({
       ...prev,
       groupCodeNameList: nextTags,
     }));
-
   };
   useEffect(() => {
     const getGroupList = async () => {
@@ -116,6 +116,22 @@ const SearchFormCode = ({
           </CheckableTag>
         ))}
       </Flex>
+      <div className="input-group">
+        <label htmlFor="commonCodeName">태그 입력 검색</label>
+        <Select
+          mode="tags"
+          style={{
+            flex: 1, // CSS 대신 인라인으로 줄 경우
+            minWidth: "250px", // 최소 너비 보장
+            width: "100%",
+          }}
+          maxCount={3} // 최대 5개까지만 생성 가능 (그 이상은 입력 안 됨)
+          placeholder="태그를 입력하고 Enter를 누르세요."
+          onChange={commonCodeNameHandler}
+          tokenSeparators={[","]}
+          value={searchParams.commonCodeNameList}
+        />
+      </div>
       <button
         className="btn-red"
         onClick={() => {
@@ -127,7 +143,6 @@ const SearchFormCode = ({
       <button
         className="btn-blue"
         onClick={() => {
-          // console.log("searchParams: ", searchParams);
           handlerSearch(searchParams);
         }}
       >
@@ -143,6 +158,7 @@ const SearchFormCode = ({
             page: 0,
             size: 10,
             groupCodeNameList: [],
+            commonCodeNameList: [],
           });
           setSelectedTags(["전체"]);
           handleInitSearch();
@@ -161,4 +177,9 @@ SearchFormCode.propTypes = {
   handlerSearch: PropTypes.func.isRequired,
   handleInitSearch: PropTypes.func.isRequired,
   setIsInsert: PropTypes.bool.isRequired,
+  selectedTags: PropTypes.array.isRequired,
+  setSelectedTags: PropTypes.array.isRequired,
+  commonCodeNameHandler: PropTypes.func.isRequired,
+  commonCodeName: PropTypes.array.isRequired,
+  setCommonCodeName: PropTypes.array.isRequired,
 };
