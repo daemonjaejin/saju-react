@@ -1,7 +1,7 @@
 import api from "@/api/axios";
 import { message } from "antd";
 
-export const searchForm = ({ setSearchParams }) => {
+export const useSearchForm = ({ setSearchParams }) => {
   const handlerChange = (nameOrEvent, value) => {
     if (nameOrEvent.target) {
       const { name, value: val } = nameOrEvent.target;
@@ -24,3 +24,5 @@ export const searchForm = ({ setSearchParams }) => {
     fetchData,
   };
 };
+
+export default useSearchForm;

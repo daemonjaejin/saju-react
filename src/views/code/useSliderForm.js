@@ -1,6 +1,6 @@
 import api from "@/api/axios";
 
-export const sliderForm = () => {
+const useSliderForm = () => {
   const fetchData = async (params, url) => {
     try {
       const response = await api.post(url, params || {});
@@ -16,3 +16,5 @@ export const sliderForm = () => {
     fetchData,
   };
 };
+
+export default useSliderForm;

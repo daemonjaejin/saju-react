@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { searchForm } from "@/hooks/code/searchForm";
+import { useState, useEffect } from "react";
 import { Select, Input, Tag, Flex, DatePicker } from "antd";
 import PropTypes from "prop-types";
+import useSearchForm from "@/views/code/useSearchForm";
 
 const SearchFormCode = ({
   setSearchParams,
@@ -15,7 +15,7 @@ const SearchFormCode = ({
   dateSearchHandler,
 }) => {
   const { RangePicker } = DatePicker;
-  const { handlerChange, fetchData } = searchForm({ setSearchParams });
+  const { handlerChange, fetchData } = useSearchForm({ setSearchParams });
   const [groupOptions, setGroupOptions] = useState([
     { value: "", label: "선택하세요", name: "" },
   ]);

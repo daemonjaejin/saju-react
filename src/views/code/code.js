@@ -2,7 +2,7 @@ import { useState } from "react";
 import api from "@/api/axios";
 import { message, Modal } from "antd";
 
-export const useCode = () => {
+const useCode = () => {
   const [searchParams, setSearchParams] = useState({
     groupCode: "",
     groupName: "",
@@ -146,3 +146,5 @@ export const useCode = () => {
     dateSearchHandler,
   };
 };
+
+export default useCode;

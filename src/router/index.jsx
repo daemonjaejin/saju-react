@@ -1,6 +1,6 @@
 import MainLayout from "@/layout/MainLayout";
 import Sample from "@/views/sample/Sample";
-import Code from "@/views/code/Code";
+import Code from "@/views/code";
 
 export const routes = [
   {

@@ -10,11 +10,11 @@ import {
   InputNumber,
 } from "antd";
 import PropTypes from "prop-types";
-import { sliderForm } from "@/hooks/code/sliderForm";
+import useSliderForm from "@/views/code/useSliderForm";
 
 const SliderForm = ({ isVisible, onClose, onInsert }) => {
   const [form] = Form.useForm();
-  const fetchData = sliderForm();
+  const fetchData = useSliderForm();
   const [groupOptions, setGroupOptions] = useState([
     { value: "", label: "선택하세요", name: "" },
   ]);
