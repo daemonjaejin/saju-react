@@ -30,14 +30,6 @@ export const useCode = () => {
     }));
   };
 
-  const [searchParam, setSearchParam] = useState({
-    groupCode: "",
-    groupCodeName: "",
-    useYn: "",
-    commonCode: "",
-    commonCodeName: "",
-  });
-
   const handlerSearch = (params) => {
     listData(params);
   };
@@ -76,7 +68,6 @@ export const useCode = () => {
           dateRange: [],
         });
         setSelectedTags(["전체"]);
-        setIsUpdate(false);
         listData();
         message.success(msg + "되었습니다.");
       }
@@ -92,6 +83,7 @@ export const useCode = () => {
       cancelText: "취소",
       onOk: async () => {
         await insertUpdate(params, "/code/update", "수정");
+        setIsUpdate(false);
       },
     });
   };
@@ -103,6 +95,7 @@ export const useCode = () => {
       cancelText: "취소",
       onOk: async () => {
         await insertUpdate(params, "/code/insert", "저장");
+        setIsInsert(false);
       },
     });
   };
@@ -122,12 +115,12 @@ export const useCode = () => {
   };
   const handleTableChange = (pagination) => {
     const newParam = {
-      ...searchParam,
+      ...searchParams,
       page: pagination.current,
       size: pagination.pageSize,
     };
 
-    setSearchParam(newParam);
+    setSearchParams(newParam);
     listData(newParam);
   };
   return {

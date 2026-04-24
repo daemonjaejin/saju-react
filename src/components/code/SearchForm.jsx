@@ -119,7 +119,7 @@ const SearchFormCode = ({
         ))}
       </Flex>
       <div className="input-group">
-        <label htmlFor="commonCodeName">태그 입력 검색</label>
+        <label htmlFor="commonCodeName">공통코드명 검색</label>
         <Select
           mode="tags"
           style={{
