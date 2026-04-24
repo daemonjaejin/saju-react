@@ -113,6 +113,7 @@ const SliderForm = ({ isVisible, onClose, onInsert }) => {
           label="순번"
           name="commonCodeOrder"
           rules={[
+            { required: true, message: "정렬 순번을 입력하세요." },
             {
               validator: (_, value) => {
                 if (!value || Number(value) > 0) {

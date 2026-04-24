@@ -1,6 +1,7 @@
 import MainLayout from "@/layout/MainLayout";
 import Sample from "@/views/sample/Sample";
 import Code from "@/views/code";
+import Menu from "@/views/menu"
 
 export const routes = [
   {
@@ -22,6 +23,10 @@ export const routes = [
       {
         path: "/code",
         element: <Code />,
+      },
+      {
+        path: "/menu",
+        element: <Menu />,
       },
     ],
   },

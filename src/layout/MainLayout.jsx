@@ -33,6 +33,11 @@ const MainLayout = () => {
               Code 관리페이지
             </Link>
           </li>
+          <li style={{ marginBottom: "10px" }}>
+            <Link to="/menu" style={{ color: "white", textDecoration: "none" }}>
+              Menu 관리페이지
+            </Link>
+          </li>
         </ul>
       </nav>
 

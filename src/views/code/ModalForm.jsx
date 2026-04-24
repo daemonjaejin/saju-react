@@ -78,13 +78,14 @@ const ModalForm = ({ isVisible, onClose, onSave, initialData }) => {
           label="정렬순번"
           name="commonCodeOrder"
           rules={[
+            { required: true, message: "정렬 순번을 입력하세요." },
             {
               pattern: /^\d+$/,
               message: "0 이상의 정수만 입력 가능합니다.",
             },
           ]}
         >
-          <Input type="number" placeholder="0" />
+          <Input type="number" placeholder="1" />
         </Form.Item>
 
         <Form.Item label="사용여부" name="useYn">
