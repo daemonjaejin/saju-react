@@ -1,8 +1,10 @@
 import api from "@/api/axios";
 import { use, useState, useMemo } from "react";
+import { message, Modal } from "antd";
 const useMenu = () => {
   const [menuList, setMenuList] = useState([]);
   const [selectedMenu, setSelectedMenu] = useState(null);
+  const [isInsert, setIsInsert] = useState(false);
   const fetchMenu = async (params) => {
     const response = await api.post("/menu/list", params || {});
     setMenuList(response?.data?.content || []);
@@ -16,15 +18,57 @@ const useMenu = () => {
       useYn: 1,
       menuUrl: "",
     });
+    setIsInsert(true);
   };
   const updateFn = (record) => {
+    console.log("record: ", record);
     setSelectedMenu({
       ...record,
       menuParentId: record.menuParentId ?? "최상위 메뉴입니다.",
     });
+    setIsInsert(false);
   };
   const cancelFn = () => {
     setSelectedMenu(null);
+  };
+  const topInsertFn = () => {
+    setIsInsert(true);
+    setSelectedMenu({
+      menuName: "",
+      menuParentId: null,
+      menuId: "자동으로 설정됩니다.",
+      useYn: 1,
+      menuUrl: "",
+    });
+  };
+  const updateInsertFn = async (form) => {
+    try {
+      const values = await form.validateFields();
+      const { createDate, updateDate, ...rest } = selectedMenu;
+      const params = {
+        ...rest,
+        ...values,
+      };
+      console.log("저장될 데이터:", params);
+      Modal.confirm({
+        title: isInsert === true ? "추가" : "수정",
+        content: isInsert === true ? "추가하시겠습니까?" : "수정하시겠습니까?",
+        okText: isInsert === true ? "추가" : "수정",
+        cancelText: "취소",
+        onOk: async () => {
+          const response = await api.put(
+            isInsert === true ? "/menu/insert" : "/menu/update",
+            params || {},
+          );
+          if (response?.status === 200 && response?.data === 1) {
+            setSelectedMenu(null);
+            fetchMenu();
+          }
+        },
+      });
+    } catch (error) {
+      message.error("오류가 발생하였습니다.", error);
+    }
   };
 
   const treeData = useMemo(() => {
@@ -78,10 +122,11 @@ const useMenu = () => {
     fetchMenu,
     treeData,
     selectedMenu,
-    setSelectedMenu,
     insertFn,
     updateFn,
     cancelFn,
+    updateInsertFn,
+    topInsertFn,
   };
 };
 export default useMenu;

@@ -10,19 +10,22 @@ import {
   Col,
   Empty,
   Space,
+  Form,
 } from "antd";
 import { PlusOutlined, ReloadOutlined } from "@ant-design/icons";
 import useMenu from "@/views/menu/menu";
+import PropTypes from "prop-types";
 
 const Menu = () => {
   const {
     fetchMenu,
     treeData,
     selectedMenu,
-    setSelectedMenu,
     insertFn,
     updateFn,
     cancelFn,
+    updateInsertFn,
+    topInsertFn,
   } = useMenu();
   useEffect(() => {
     fetchMenu();
@@ -79,6 +82,20 @@ const Menu = () => {
     },
   ];
 
+  const [form] = Form.useForm();
+  const menuId = selectedMenu?.menuId;
+  useEffect(() => {
+    console.log("selectedMenu: ", selectedMenu);
+    // 폼이 실제로 마운트 되었을 때만 작동하도록 보장하려면
+    // 사실 가장 좋은 방법은 <Form>을 항상 렌더링하는 것입니다.
+    if (selectedMenu) {
+      form.setFieldsValue({
+        menuName: selectedMenu.menuName,
+        menuUrl: selectedMenu.menuUrl,
+        useYn: selectedMenu.useYn,
+      });
+    }
+  }, [menuId, selectedMenu, form]);
   return (
     <div className="admin-content">
       {/* 상단 브레드크럼 등 생략, 메인 레이아웃 시작 */}
@@ -94,6 +111,7 @@ const Menu = () => {
                   icon={<PlusOutlined />}
                   className="btn-blue"
                   size="small"
+                  onClick={topInsertFn}
                 >
                   +최상위 메뉴 추가
                 </Button>
@@ -135,65 +153,84 @@ const Menu = () => {
             }
           >
             {selectedMenu ? (
-              <div className="menu-detail-form">
-                <div className="form-item">
-                  <label>부모 메뉴 ID</label>
-                  <Input
-                    placeholder="자동으로 설정됩니다"
-                    value={selectedMenu?.menuParentId}
-                    disabled
-                  />
-                </div>
+              <Form form={form}>
+                <div className="menu-detail-form">
+                  <div className="form-item">
+                    <label>부모 메뉴 ID</label>
+                    <Input
+                      placeholder="자동으로 설정됩니다"
+                      value={selectedMenu?.menuParentId}
+                      disabled
+                    />
+                  </div>
 
-                <div className="form-item">
-                  <label>메뉴 ID</label>
-                  <Input
-                    value={selectedMenu?.menuId}
-                    disabled
-                  />
-                </div>
+                  <div className="form-item">
+                    <label>메뉴 ID</label>
+                    <Input value={selectedMenu?.menuId} disabled />
+                  </div>
 
-                <div className="form-item">
-                  <label>메뉴 이름</label>
-                  <Input
-                    value={selectedMenu?.menuName}
-                    onChange={(e) =>
-                      setSelectedMenu({
-                        ...selectedMenu,
-                        menuName: e.target.value,
-                      })
-                    }
-                  />
-                </div>
+                  <div className="form-item">
+                    <label>메뉴 이름</label>
+                    <Form.Item
+                      name="menuName"
+                      rules={[
+                        { required: true, message: "메뉴이름을 입력해주세요" },
+                        {
+                          min: 1,
+                          message: "메뉴이름은 1자 이상이여야 합니다!",
+                        },
+                        {
+                          max: 100,
+                          message: "메뉴이름은 100자 이하여야 합니다!",
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                  </div>
 
-                <div className="form-item">
-                  <label>URL 경로</label>
-                  <Input value={`/${selectedMenu?.menuName?.toLowerCase()}`} />
-                </div>
+                  <div className="form-item">
+                    <label>URL 경로</label>
+                    <Form.Item
+                      name="menuUrl"
+                      rules={[
+                        { required: true, message: "URL을 입력해주세요" },
+                        {
+                          min: 1,
+                          message: "URL은 1자 이상이여야 합니다!",
+                        },
+                        {
+                          max: 100,
+                          message: "URL은 100자 이하여야 합니다!",
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                  </div>
 
-                <div className="form-item">
-                  <label>사용 여부</label>
-                  <Select
-                    value={selectedMenu?.useYn === 1 ? "사용" : "미사용"}
-                    style={{ width: "100%" }}
-                    onChange={(val) =>
-                      setSelectedMenu({ ...selectedMenu, useYn: val })
-                    }
+                  <div className="form-item">
+                    <label>사용 여부</label>
+                    <Form.Item name="useYn">
+                      <Select>
+                        <Select.Option value={1}>사용</Select.Option>
+                        <Select.Option value={0}>미사용</Select.Option>
+                      </Select>
+                    </Form.Item>
+                  </div>
+
+                  <Button
+                    type="primary"
+                    className="btn-blue"
+                    block
+                    style={{ marginTop: "10px" }}
+                    onClick={() => updateInsertFn(form)}
+                    htmlType="submit" // 타입을 submit으로 변경하면 더 좋습니다
                   >
-                    <Select.Option value="1">사용</Select.Option>
-                    <Select.Option value="0">미사용</Select.Option>
-                  </Select>
+                    변경사항 저장
+                  </Button>
                 </div>
-
-                <Button
-                  type="primary"
-                  className="btn-blue"
-                  block
-                  style={{ marginTop: "10px" }}
-                >
-                  변경사항 저장
-                </Button>
-              </div>
+              </Form>
             ) : (
               <Empty
                 image={Empty.PRESENTED_IMAGE_SIMPLE}
@@ -209,3 +246,7 @@ const Menu = () => {
 };
 
 export default Menu;
+
+Menu.propTypes = {
+  selectedMenu: PropTypes.object.isRequired,
+};
