@@ -1,6 +1,6 @@
 import { useState } from "react";
-import api from "@/api/axios";
 import { message, Modal } from "antd";
+import { codeService } from "@/api/code/codeService";
 
 const useCode = () => {
   const [searchParams, setSearchParams] = useState({
@@ -37,9 +37,29 @@ const useCode = () => {
   const [listResult, setListResult] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
 
+   const handlerChange = (nameOrEvent, value) => {
+     if (nameOrEvent.target) {
+       const { name, value: val } = nameOrEvent.target;
+       setSearchParams((prev) => ({ ...prev, [name]: val }));
+     } else {
+       setSearchParams((prev) => ({ ...prev, [nameOrEvent]: value }));
+     }
+   };
+
+  const groupListData = async (url, params) => {
+    try {
+      const response = await codeService.list(url, params || {});
+      return response?.data?.content || [];
+    } catch (error) {
+      console.log("error: ", error);
+    } finally {
+      console.log("finally");
+    }
+  };
+
   const listData = async (params) => {
     try {
-      const response = await api.post("/code/list", params || {});
+      const response = await codeService.list("/code/list", params || {});
       setListResult(response?.data?.content || []);
       setTotalCount(response?.data?.totalCount || 0);
       setSearchParams((prev) => ({
@@ -55,7 +75,7 @@ const useCode = () => {
   };
   const insertUpdate = async (params, url, msg) => {
     try {
-      const response = await api.put(url, params || {});
+      const response = await codeService.updateInsert(url, params || {});
       if (response?.status === 200 && response?.data === 1) {
         setSearchParams({
           groupCode: "",
@@ -144,6 +164,8 @@ const useCode = () => {
     setSelectedTags,
     commonCodeNameHandler,
     dateSearchHandler,
+    groupListData,
+    handlerChange,
   };
 };
 

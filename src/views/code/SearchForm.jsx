@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Select, Input, Tag, Flex, DatePicker } from "antd";
 import PropTypes from "prop-types";
-import useSearchForm from "@/views/code/useSearchForm";
 
 const SearchFormCode = ({
   setSearchParams,
@@ -13,9 +12,10 @@ const SearchFormCode = ({
   setSelectedTags,
   commonCodeNameHandler,
   dateSearchHandler,
+  groupListData,
+  handlerChange,
 }) => {
   const { RangePicker } = DatePicker;
-  const { handlerChange, fetchData } = useSearchForm({ setSearchParams });
   const [groupOptions, setGroupOptions] = useState([
     { value: "", label: "선택하세요", name: "" },
   ]);
@@ -49,15 +49,14 @@ const SearchFormCode = ({
   useEffect(() => {
     const getGroupList = async () => {
       try {
-        const responseData = await fetchData(searchParams, "/group/list");
-        const rawData = responseData.data.content || [];
-        const formattedOptions = rawData.map((item) => ({
+        const rowData = await groupListData("/group/list", searchParams);
+        const formattedOptions = rowData.map((item) => ({
           value: item.groupCode,
           label: item.groupCodeName,
           name: item.groupCodeName,
         }));
         // 2. 칩/태그용 데이터 추출 (groupCodeName만 모으기)
-        const newTags = ["전체", ...rawData.map((item) => item.groupCodeName)];
+        const newTags = ["전체", ...rowData.map((item) => item.groupCodeName)];
 
         // 3. 상태 업데이트 (이 시점에 화면이 다시 그려짐)
         setTagsData(newTags);
@@ -185,4 +184,6 @@ SearchFormCode.propTypes = {
   setSelectedTags: PropTypes.array.isRequired,
   commonCodeNameHandler: PropTypes.func.isRequired,
   dateSearchHandler: PropTypes.func.isRequired,
+  groupListData: PropTypes.func.isRequired,
+  handlerChange: PropTypes.func.isRequired,
 };

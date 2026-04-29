@@ -13,7 +13,7 @@ import {
   Form,
 } from "antd";
 import { PlusOutlined, ReloadOutlined } from "@ant-design/icons";
-import useMenu from "@/views/menu/menu";
+import useMenu from "@/hooks/menu/menu";
 import PropTypes from "prop-types";
 
 const Menu = () => {

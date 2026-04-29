@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Table } from "antd";
-import useCode from "@/views/code/code";
+import useCode from "@/hooks/code/code";
 import SearchForm from "@/views/code/SearchForm";
 import ModalForm from "@/views/code/ModalForm";
 import SliderForm from "@/views/code/SliderForm";
@@ -27,6 +27,8 @@ const Code = () => {
     setSelectedTags,
     commonCodeNameHandler,
     dateSearchHandler,
+    groupListData,
+    handlerChange,
   } = useCode();
 
   useEffect(() => {
@@ -97,6 +99,8 @@ const Code = () => {
         setSelectedTags={setSelectedTags}
         commonCodeNameHandler={commonCodeNameHandler}
         dateSearchHandler={dateSearchHandler}
+        groupListData={groupListData}
+        handlerChange={handlerChange}
       />
       {/* 총 개수 표시 영역 */}
       <div className="table-header">
@@ -143,6 +147,7 @@ const Code = () => {
       )}
       {isInsert && (
         <SliderForm
+          groupListData={groupListData}
           isVisible={isInsert}
           onClose={() => {
             setIsInsert(false);

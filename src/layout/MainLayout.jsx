@@ -16,7 +16,7 @@ const MainLayout = () => {
         <h3>ADMIN MENU</h3>
         <ul style={{ listStyle: "none", padding: 0 }}>
           <li style={{ marginBottom: "10px" }}>
-            <Link to="/" style={{ color: "white", textDecoration: "none" }}>
+            <Link to="/dashboard" style={{ color: "white", textDecoration: "none" }}>
               홈 (Dashboard)
             </Link>
           </li>

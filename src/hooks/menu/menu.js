@@ -1,5 +1,5 @@
 import api from "@/api/axios";
-import { use, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { message, Modal } from "antd";
 const useMenu = () => {
   const [menuList, setMenuList] = useState([]);
@@ -44,7 +44,7 @@ const useMenu = () => {
   const updateInsertFn = async (form) => {
     try {
       const values = await form.validateFields();
-      const { createDate, updateDate, ...rest } = selectedMenu;
+      const { _createDate, _updateDate, ...rest } = selectedMenu;
       const params = {
         ...rest,
         ...values,

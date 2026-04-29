@@ -10,11 +10,9 @@ import {
   InputNumber,
 } from "antd";
 import PropTypes from "prop-types";
-import useSliderForm from "@/views/code/useSliderForm";
 
-const SliderForm = ({ isVisible, onClose, onInsert }) => {
+const SliderForm = ({ isVisible, onClose, onInsert, groupListData }) => {
   const [form] = Form.useForm();
-  const fetchData = useSliderForm();
   const [groupOptions, setGroupOptions] = useState([
     { value: "", label: "선택하세요", name: "" },
   ]);
@@ -27,9 +25,8 @@ const SliderForm = ({ isVisible, onClose, onInsert }) => {
   useEffect(() => {
     const getGroupList = async () => {
       try {
-        const responseData = await fetchData.fetchData({}, "/group/list");
-        const rawData = responseData.data.content || [];
-        const formattedOptions = rawData.map((item) => ({
+        const rowData = await groupListData("/group/list", {});
+        const formattedOptions = rowData.map((item) => ({
           value: item.groupCode,
           label: item.groupCodeName,
         }));
@@ -149,6 +146,7 @@ SliderForm.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onInsert: PropTypes.func.isRequired,
+  groupListData: PropTypes.func.isRequired,
 };
 
 export default SliderForm;

@@ -19,6 +19,7 @@ export const routes = [
         element: <Navigate to="/login" replace />, // 루트 접속 시 로그인으로
       },
       {
+        path: "/dashboard",
         element: (
           <div>
             <h2>대시보드 (Home)</h2>

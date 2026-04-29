@@ -29,7 +29,7 @@ const LoginPage = () => {
 
       localStorage.setItem("token", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
-      navigate("/code"); // MainLayout의 index로 이동
+      navigate("/dashboard"); // 로그인 성공 후 대시보드로 이동
     } catch (error) {
       if (axios.isAxiosError(error)) {
         alert(error.response?.data?.message ?? "로그인에 실패했습니다");
